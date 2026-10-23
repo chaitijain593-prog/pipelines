@@ -231,9 +231,9 @@ def get_pydantic_basemodel_base_symbol_for_return(
         ) or (isinstance(func_node, ast.Name) and func_node.id == 'NamedTuple'):
             nt_field_list = return_ann.args[1].elts
             for el in nt_field_list:
-                if f'{RETURN_PREFIX}{el.elts[0].value}' == return_name:
-                    annotation = _maybe_unwrap_optional_subscript(el.elts[1])
-                    return traverse_ast_node_values_to_get_id(annotation)
+                      if f"{RETURN_PREFIX}{getattr(el.elts[0], 'value', getattr(el.elts[0], 's', None))}" == return_name:              
+                          annotation = _maybe_unwrap_optional_subscript(el.elts[1])
+                          return traverse_ast_node_values_to_get_id(annotation)
 
     raise TypeError(
         f"Unexpected pydantic.BaseModel return type annotation '{ast.dump(return_ann)}' "
@@ -378,8 +378,8 @@ def get_custom_artifact_base_symbol_for_return(
         ) or (isinstance(func, ast.Name) and func.id == 'NamedTuple'):
             nt_field_list = return_ann.args[1].elts
             for el in nt_field_list:
-                if f'{RETURN_PREFIX}{el.elts[0].value}' == return_name:
-                    return traverse_ast_node_values_to_get_id(el.elts[1])
+                    if f"{RETURN_PREFIX}{getattr(el.elts[0], 'value', getattr(el.elts[0], 's', None))}" == return_name:
+                                            return traverse_ast_node_values_to_get_id(el.elts[1])
 
     raise TypeError(f"Unexpected type annotation '{return_ann}' for {func}.")
 
